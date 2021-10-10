@@ -1,10 +1,11 @@
 let user;
 const http = new httpUtils;
+const properties = new props;
 document.getElementById("getById").addEventListener("click", (event) => {
     let id = event.target.previousElementSibling.value;
     let resultsList = document.getElementById("userList");
     resultsList.innerHTML = "";
-    http.get(`http://localhost:8080/result/${id}`)
+    http.get(`${properties.serviceUrl}/result/${id}`)
         .then(userResults => insertSingleUser(userResults, document.getElementById("userList"), id))
         .catch(err => console.log(err));
 })
@@ -12,7 +13,7 @@ document.getElementById("getById").addEventListener("click", (event) => {
 document.getElementById("getAll").addEventListener("click", (event) => {
     let resultsList = document.getElementById("userList");
     resultsList.innerHTML = "";
-    http.get(`http://localhost:8080/result/all`)
+    http.get(`${properties.serviceUrl}/result/all`)
         .then(data => insertAllUsersResults(data))
         .catch(err => console.log(err));
 })
@@ -81,8 +82,8 @@ function renderSingleQuestion(question) {
     questionHeader.innerText = question.question;
     let answersContainer = document.createElement("ul");
     answersContainer.className = "list-group list-group-flush questions-container";
-    let answers = question.answers.split(", ");
-    let rejectedAnswers = question.rejectedAnswers.split(", ");
+    let answers = question.answers.split(properties.answersSeparator);
+    let rejectedAnswers = question.rejectedAnswers.split(properties.answersSeparator);
     answers.forEach(answer => {
         answersContainer.innerHTML += `
                     <li class="list-group-item pl-5 list-group-item-action">

@@ -1,5 +1,6 @@
 const http = new httpUtils;
-http.get('http://localhost:8080/user/all')
+const properties = new props;
+http.get(`${properties.serviceUrl}/user/all`)
     .then(data => insert(data))
     .catch(err => console.log(err));
 
@@ -44,7 +45,7 @@ function insert(data) {
         userContainer.appendChild(infoContainer);
 
         let adminToggle = userContainer.querySelector("input.admin-toggle");
-        if (user.admin) {
+        if (user.role === 'ADMIN') {
             adminToggle.setAttribute("checked", "checked");
         }
         let updateButtonContainer = document.createElement("div");
@@ -59,9 +60,9 @@ function insert(data) {
                 id: user.id,
                 username: nameInput.value,
                 password: passwordInput.value,
-                admin: adminToggle.checked
+                role: adminToggle.checked ? 'ADMIN' : 'USER'
             };
-            http.put(`http://localhost:8080/user/update`, updatedUser)
+            http.put(`${properties.serviceUrl}/user/update`, updatedUser)
                 .then(data => notifySuccess(userContainer, data))
                 .catch(err => notifyFailure(userContainer, err));
         })
@@ -79,7 +80,7 @@ function notifySuccess(usercontainer, data) {
 
 
     setTimeout(() => {
-        window.location.href = "http://localhost:8080/users";
+        window.location.href = `${properties.serviceUrl}/users`;
     }, 2000);
 }
 
@@ -91,6 +92,6 @@ function notifyFailure(usercontainer, err) {
             </div>`;
 
     setTimeout(() => {
-        window.location.href = "http://localhost:8080/users";
+        window.location.href = `${properties.serviceUrl}/users`;
     }, 2000);
 }

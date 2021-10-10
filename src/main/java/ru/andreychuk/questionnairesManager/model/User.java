@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Setter
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "username")
@@ -26,15 +25,16 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "is_admin")
-    private boolean isAdmin;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PassedQuestionnaire> passedQuestionnaires;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return Collections.singleton(getRole());
     }
 
     @Override
@@ -57,17 +57,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Set<Role> getRoles() {
-        Map<Role, Boolean> roleStatuses = new HashMap(){{
-            put(Role.USER, true);
-            put(Role.ADMIN, isAdmin());
-        }};
-        return roleStatuses.entrySet().stream()
-                .filter(Map.Entry::getValue)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,5 +68,9 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isAdmin() {
+        return this.getRole().equals(Role.ADMIN);
     }
 }

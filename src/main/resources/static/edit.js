@@ -1,5 +1,5 @@
 const http = new httpUtils;
-http.get('http://localhost:8080/questionnaires')
+http.get(`${properties.serviceUrl}/questionnaires`)
     .then(data => insert(data))
     .catch(err => console.log(err));
 let questionnaireList;
@@ -33,7 +33,7 @@ function insert(data) {
             switchToExpandedMode(questionnaireFormConainer, event.target, hideButton);
         });
         deleteButton.addEventListener("click", (event) => {
-            http.delete(`http://localhost:8080/questionnaires/${questionnaire.id}`)
+            http.delete(`${properties.serviceUrl}/questionnaires/${questionnaire.id}`)
                 .then(data => insert(data))
                 .catch(err => console.log(err));
             allQuestionnairesContainer.removeChild(questionnaireContainer);

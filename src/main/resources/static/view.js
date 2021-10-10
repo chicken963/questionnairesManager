@@ -1,5 +1,6 @@
 const http = new httpUtils;
-http.get('http://localhost:8080/questionnaires')
+const properties = new props;
+http.get(`${properties.serviceUrl}/questionnaires`)
     .then(data => insert(data))
     .catch(err => console.log(err));
 
@@ -26,7 +27,7 @@ function insert(data) {
             questionsRendered++;
             let label = "questionnaire" + questionnairesRendered + "question" + questionsRendered
             questionStatuses.set(label, false);
-            let answers = question.answers.split(", ");
+            let answers = question.answers.split(properties.answersSeparator);
             itemHTML += `<li class="list-group-item list-group-item-secondary m-1">
                 <h5>${question.question}</h5>
                 <ul class="list-group list-group-flush questions-container">`
@@ -117,7 +118,7 @@ function sendPassedQuestionnaire(data, questionnaireId) {
         let targetQuestionnaire = Object.assign(sourceQuestionnaire);
         targetQuestionnaire.questions.forEach(question => {
             let questionId = question.id;
-            let sourceAnswers = question.answers.split(", ");
+            let sourceAnswers = question.answers.split(properties.answersSeparator);
             let targetAnswers = [];
             let rejectedAnswers = [];
             sourceAnswers.forEach(answer => {
@@ -127,11 +128,11 @@ function sendPassedQuestionnaire(data, questionnaireId) {
                     rejectedAnswers.push(answer);
                 }
             });
-            question.answers = targetAnswers.join(", ");
-            question.rejectedAnswers = rejectedAnswers.join(", ");
+            question.answers = targetAnswers.join(properties.answersSeparator);
+            question.rejectedAnswers = rejectedAnswers.join(properties.answersSeparator);
         });
     currentQuestionnaire = targetQuestionnaire;
-    http.post(`http://localhost:8080/send`, targetQuestionnaire)
+    http.post(`${properties.serviceUrl}/send`, targetQuestionnaire)
         .then((data) => stub(data))
         .catch(err => showNotification(err, currentQuestionnaire, false));
 }
@@ -156,7 +157,7 @@ function showNotification(text, questionnaire, success) {
     }
 
     setTimeout(() => {
-        window.location.href = "http://localhost:8080/view";}, 2000)
+        window.location.href = `${properties.serviceUrl}/view`;}, 2000)
 }
 
 function stub(data) {

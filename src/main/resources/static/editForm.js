@@ -1,3 +1,4 @@
+const properties = new props;
 class questionEditForm {
     allFieldsFilled = false;
 
@@ -175,7 +176,7 @@ class questionEditForm {
             newQuestion.firstChild.appendChild(this.prepareQuestionInput(questionData ? questionData.question : null, questionData ? questionsContainer : null));
             newQuestion.firstChild.appendChild(this.prepareIdInput(questionData, questionsContainer));
             newQuestion.firstChild.appendChild(this.prepareRemoveQuestionButton());
-            newQuestion.appendChild(this.prepareAnswersList(questionData ? questionData.answers.split(", ") : null, newQuestionNumber, questionsContainer));
+            newQuestion.appendChild(this.prepareAnswersList(questionData ? questionData.answers.split(properties.answersSeparator) : null, newQuestionNumber, questionsContainer));
             newQuestion.appendChild(this.prepareAddAnswerButton());
             this.teachToSwitchQuestionType(newQuestion);
             questionsContainer.insertBefore(newQuestion, questionsContainer.lastElementChild);
@@ -218,7 +219,7 @@ class questionEditForm {
                 let question = {
                     question: questionName,
                     questionType: questionContainer.querySelector('input[type="checkbox"]').checked ? "MULTIPLE" : "SINGLE",
-                    answers: answers.join(", ")
+                    answers: answers.join(properties.answersSeparator)
                 }
                 questions.push(question);
             })
@@ -228,7 +229,7 @@ class questionEditForm {
                 questions: questions
             }
             const http = new httpUtils;
-            http.post('http://localhost:8080/new', data)
+            http.post(`${properties.serviceUrl}/new`, data)
                 .then(data => this.notifySuccess(null, data))
                 .catch(err => this.notifyFailure(null, data));
         })
@@ -248,7 +249,7 @@ class questionEditForm {
                     question: questionName,
                     id: questionId,
                     questionType: questionContainer.querySelector('input[type="checkbox"]').checked ? "MULTIPLE" : "SINGLE",
-                    answers: answers.join(", ")
+                    answers: answers.join(properties.answersSeparator)
                 }
                 questions.push(question);
             })
@@ -259,7 +260,7 @@ class questionEditForm {
                 questions: questions
             }
             const http = new httpUtils;
-            http.put('http://localhost:8080/update', data)
+            http.put(`${properties.serviceUrl}/update`, data)
                 .then(data => this.notifySuccess(questionnaireEditContainer, data))
                 .catch(err => this.notifyFailure(questionnaireEditContainer, data));
         })
@@ -286,7 +287,7 @@ class questionEditForm {
 
 
         setTimeout(() => {
-            window.location.href = "http://localhost:8080/view";
+            window.location.href = `${properties.serviceUrl}/view`;
         }, 2000);
     }
 
@@ -301,7 +302,7 @@ class questionEditForm {
             </div>`;
 
         setTimeout(() => {
-            window.location.href = "http://localhost:8080/view";
+            window.location.href = `${properties.serviceUrl}/view`;
         }, 2000);
     }
 }

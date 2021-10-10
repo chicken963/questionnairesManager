@@ -12,34 +12,30 @@ import ru.andreychuk.questionnairesManager.enums.Role;
 import ru.andreychuk.questionnairesManager.model.PassedQuestionnaire;
 import ru.andreychuk.questionnairesManager.model.User;
 import ru.andreychuk.questionnairesManager.repositories.UserRepository;
+import ru.andreychuk.questionnairesManager.services.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("all")
-    public ResponseEntity<List<User>> userList(@AuthenticationPrincipal User currentUser) {
-        if (currentUser.isAdmin()) {
-            return ResponseEntity.ok(userRepository.findAll());
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<List<User>> userList() {
+        return ResponseEntity.ok(userService.getAllUsers());
+
     }
 
     @PutMapping("update")
-    public ResponseEntity<User> updateUserInfo(@AuthenticationPrincipal User currentUser,
-                                               @RequestBody User user) {
-        if (currentUser.isAdmin()) {
-            userRepository.save(user);
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<User> updateUserInfo(@RequestBody User user) {
+
+        userService.addUser(user);
+        return ResponseEntity.ok(user);
+
     }
 
 }

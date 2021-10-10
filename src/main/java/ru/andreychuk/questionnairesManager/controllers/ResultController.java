@@ -3,6 +3,7 @@ package ru.andreychuk.questionnairesManager.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,31 +20,27 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/result")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class ResultController {
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/all")
-    public ResponseEntity<Map<Long, Set<PassedQuestionnaire>>> getAllResults(@AuthenticationPrincipal User currentUser) {
+    public ResponseEntity<Map<Long, Set<PassedQuestionnaire>>> getAllResults() {
         Map<Long, Set<PassedQuestionnaire>> allResults = new HashMap<>();
-        if (currentUser.isAdmin()) {
-            for (User user : userRepository.findAll()) {
-                allResults.put(user.getId(), user.getPassedQuestionnaires());
-            }
+        for (User user : userRepository.findAll()) {
+            allResults.put(user.getId(), user.getPassedQuestionnaires());
         }
+
         return ResponseEntity.ok(allResults);
     }
 
     @GetMapping("/{user}")
-    public ResponseEntity<Set<PassedQuestionnaire>> getUserResults(@AuthenticationPrincipal User currentUser,
-                                                                   @PathVariable User user) {
-        if (currentUser.isAdmin()) {
-            if (user != null) {
-                return ResponseEntity.ok(user.getPassedQuestionnaires());
-            } else {
-                return ResponseEntity.badRequest().body(Collections.emptySet());
-            }
+    public ResponseEntity<Set<PassedQuestionnaire>> getUserResults(@PathVariable User user) {
+        if (user != null) {
+            return ResponseEntity.ok(user.getPassedQuestionnaires());
+        } else {
+            return ResponseEntity.badRequest().body(Collections.emptySet());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.emptySet());
     }
 }

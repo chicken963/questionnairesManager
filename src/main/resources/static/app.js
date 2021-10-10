@@ -1,7 +1,3 @@
-class props {
-    serviceUrl = "http://localhost:8080";
-}
-
 let navbar = document.createElement("nav");
 let serviceUrl = new props().serviceUrl;
 navbar.className = "navbar navbar-expand-lg navbar-light bg-light";
