@@ -61,5 +61,5 @@ INSERT INTO questions VALUES
 (random_uuid(), SELECT id from questionnaires where heading='Your food preferences', 'Your perfect meat is...', 'SINGLE', 'Fried,,,, Boiled,,,, Stewed');
 
 INSERT INTO users(username, password, role) VALUES
-                         ('sa', 'password', 'USER'),
+                         ('user', 'user', 'USER'),
                          ('admin', 'admin', 'ADMIN');
