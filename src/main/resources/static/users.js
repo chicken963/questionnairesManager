@@ -36,8 +36,8 @@ function insert(data) {
         infoContainer.appendChild(passwordContainer);
 
         let adminContainer = document.createElement("div");
-        adminContainer.className = "col-2 d-flex align-items-center";
-        adminContainer.innerHTML = `<label class="switch"><span>Admin</span>
+        adminContainer.className = "col-2 d-flex align-items-center flex-column justify-content-center";
+        adminContainer.innerHTML = `<div>Is admin</div><label class="switch">
                                         <input type="checkbox" class="admin-toggle">
                                             <span class="slider round"></span>
                                     </label>`;

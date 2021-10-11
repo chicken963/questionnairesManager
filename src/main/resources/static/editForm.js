@@ -62,7 +62,7 @@ class questionEditForm {
         this.activateInputNotNullCheck(input, questionsContainer);
         let button = document.createElement("button");
         button.setAttribute("type", "button");
-        button.className = "btn btn-outline-warning w-15 remove-answer";
+        button.className = "btn btn-outline-warning col-2 remove-answer";
         button.innerText = "Remove";
         this.teachToRemoveAnswerItem(button);
         newAnswer.appendChild(input);
@@ -107,7 +107,7 @@ class questionEditForm {
 
     prepareAddAnswerButton() {
         let button = document.createElement("button");
-        button.className = "btn btn-warning mt-2 add-answer";
+        button.className = "btn btn-warning col-2 mt-2 add-answer";
         button.innerText = "Add answer";
         button.addEventListener("click", (event) => {
             let answersList = event.target.previousElementSibling;
@@ -142,7 +142,7 @@ class questionEditForm {
 
     prepareRemoveQuestionButton() {
         let removeQuestionButton = document.createElement("button");
-        removeQuestionButton.className = "btn btn-outline-danger w-10 remove-question";
+        removeQuestionButton.className = "btn btn-outline-danger col-2 remove-question";
         removeQuestionButton.setAttribute("type", "text");
         removeQuestionButton.innerText = "Remove";
         this.teachToRemoveQuestionItem(removeQuestionButton);

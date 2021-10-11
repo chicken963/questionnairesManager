@@ -26,7 +26,7 @@ function insert(data) {
         deleteButton.innerText = "Delete";
         let hideButton = questionnaireContainer.querySelector("button.hideButton");
         hideButton.parentElement.insertBefore(editButton, hideButton);
-        hideButton.parentElement.insertBefore(deleteButton, hideButton);
+        hideButton.parentElement.appendChild(deleteButton);
         editButton.addEventListener("click", (event) => {
             let questionnaireFormConainer = event.target.parentElement.nextElementSibling;
             defineRenderForm(questionnaireFormConainer, questionnaire);
@@ -55,7 +55,7 @@ function switchToExpandedMode(questionnaireContainer, editButton, hideButton) {
 
 function defineRenderForm(questionnaireContainer, questionnaire) {
     questionnaireContainer.innerHTML = `
-            <div class="input-group mb-2">
+            <div class="input-group mb-2 mt-2">
                 <div class="input-group-prepend">
                     <span class="input-group-text bg-primary text-light">Questionnaire heading</span>
                 </div>
@@ -65,7 +65,7 @@ function defineRenderForm(questionnaireContainer, questionnaire) {
             </ul>
             <button class="btn btn-primary btn-lg btn-block" disabled>Update questionnaire</button>`;
     let addQuestionButton = document.createElement("button");
-    addQuestionButton.className = "btn btn-info m-2";
+    addQuestionButton.className = "btn btn-info col-2 m-2";
     addQuestionButton.innerText = "Add question";
     addQuestionButton.setAttribute("style", "background-color: salmon; border: none")
     let questionsContainer = questionnaireContainer.querySelector("ul");
